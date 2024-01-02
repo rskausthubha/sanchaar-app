@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 
 const PORT = process.env.PORT || 3000
-require('./models/dbConnection')
-const rootRoute = require('./routes/rootRoute')
+require('./config/dbConnection')()
+const rootRoute = require('./routes/rootRoutes')
 
 app.use(express.json())
 
