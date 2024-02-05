@@ -29,11 +29,8 @@ exports.handleLogin = async (req, res) => {
         const UserModel = mongoose.model(role, new mongoose.Schema({}))
 
         console.log(UserModel)
-
-        let queryObject = {}
-        queryObject[keyForUsername] = username
         
-        let user = await UserModel.findOne(queryObject)
+        let user = await UserModel.findOne({ [keyForUsername]: username })
         user = user.toJSON()
         
         console.log(user)
