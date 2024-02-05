@@ -7,21 +7,23 @@ import MgmtPage from "./pages/MgmtPage"
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [role, setRole] = useState(null)
 
-  const setUserAfterLogin = (loggedInUser) => {
+  const doAfterLogin = (loggedInUser, userRole) => {
     setUser(loggedInUser)
+    setRole(userRole)
   }
 
   return (
     <>
       {!user ? (
-        <LoginPage setUserAfterLogin={setUserAfterLogin} />
+        <LoginPage doAfterLogin={doAfterLogin} />
       ) : (
         <div>
-          {user.role === "student" && <StudentPage />}
-          {user.role === "parent" && <ParentPage />}
-          {user.role === "faculty" && <FacultyPage />}
-          {user.role === "mgmt" && <MgmtPage />}
+          {role === "student" && <StudentPage />}
+          {role === "parent" && <ParentPage />}
+          {role === "facultyMember" && <FacultyPage />}
+          {role === "mgmtAdmin" && <MgmtPage />}
         </div>
       )}
     </>

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from 'axios'
 
-const LoginPage = ({ setUserAfterLogin }) => {
+const LoginPage = ({ doAfterLogin }) => {
     const [username, setUsername] = useState("")
     const [pwd, setPwd] = useState("")
     const [role, setRole] = useState("")
@@ -10,7 +10,7 @@ const LoginPage = ({ setUserAfterLogin }) => {
         try {
             let user = await axios.post('/', { username, pwd, role })
 
-            setUserAfterLogin(user)
+            doAfterLogin(user, role)
         } catch (err) {
             console.error(`ERROR >> ${err}`)
         }
