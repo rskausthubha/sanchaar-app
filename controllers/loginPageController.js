@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 
 
 exports.handleLogin = async (req, res) => {
@@ -17,7 +18,10 @@ exports.handleLogin = async (req, res) => {
             case "mgmtAdmin":
                 keyForUsername = "username"
             default:
-                return res.status(401).json({ error: "Please select a role" })
+                res.status(401).json({
+                    error: "Authentication failed",
+                    message: "Role required"
+                })
         }
 
         const UserModel = mongoose.model(role, new mongoose.Schema({}))
@@ -26,11 +30,22 @@ exports.handleLogin = async (req, res) => {
         user = user.toJSON()
 
         if (!user || user.loginPwd !== pwd) {
-            return res.status(401).json({ error: "Invalid credentials" })
+            res.status(401).json({
+                error: "Authentication failed",
+                message: "Invalid credentials"
+            })
         }
 
-        res.send({ user, role })
+        const toBeTokenized = { user, role }
+        const token = jwt.sign(toBeTokenized, process.env.ACCESS_TOKEN_SECRET_KEY, { expiresIn: '1h' })
+
+        res.send(token)
     } catch (err) {
         console.error(`Error handling login >>> ${err}`)
+
+        return res.status(500).json({
+            error: "An error occurred",
+            message: `${err}`
+        })
     }
 }
